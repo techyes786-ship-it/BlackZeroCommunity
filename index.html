@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Zero Community | Web Dev Course</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- 1. Basic Setup & Dark Theme --- */
+        body {
+            background-color: #121212; 
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-top: 60px; 
+            display: flex; 
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .wrapper {
+            display: flex;
+            flex: 1;
+        }
+
+        /* --- 2. Top Navbar --- */
+        .top-navbar {
+            background-color: #f1c40f; 
+            color: black;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
+
+        .top-navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- 3. Sidebar Design --- */
+        .sidebar {
+            width: 250px;
+            background-color: #1a1a1a;
+            border-right: 2px solid #3498db; 
+            height: calc(100vh - 60px);
+            position: fixed;
+            top: 60px; 
+            padding-top: 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            font-size: 16px;
+            border-bottom: 1px solid #333;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover {
+            background-color: #3498db; 
+            color: white;
+        }
+
+        /* --- 4. Main Content Area --- */
+        .main-content {
+            margin-left: 250px; 
+            padding: 30px;
+            width: calc(100% - 250px);
+            box-sizing: border-box;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            color: #f1c40f;
+            font-size: 32px;
+        }
+
+        /* --- 5. Responsive Grid --- */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- 6. Class Cards & Thumbnails --- */
+        .class-card {
+            background-color: #1e1e1e;
+            border: 2px solid #333; 
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+
+        .class-card:hover {
+            border-color: #f1c40f; 
+            transform: translateY(-5px); 
+            box-shadow: 0px 5px 15px rgba(241, 196, 15, 0.2);
+        }
+
+        .class-thumb {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+        }
+
+        .class-card h3 {
+            color: white;
+            margin: 10px 0;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .class-card p {
+            color: #aaaaaa;
+            font-size: 13px;
+        }
+
+        /* --- 7. Buttons Design --- */
+        .btn {
+            display: block;
+            padding: 12px 15px;
+            margin: 10px auto;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 2px solid transparent;
+            text-align: center;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        .btn i { margin-right: 8px; } 
+
+        .btn-yellow { background-color: #f1c40f; color: black; }
+        .btn-blue { background-color: #3498db; color: white; }
+        .btn-white { background-color: white; color: black; }
+        
+        .btn-outline { 
+            background-color: transparent; 
+            color: #f1c40f; 
+            border: 2px solid #f1c40f; 
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+
+        .btn-outline:hover {
+            background-color: #f1c40f;
+            color: black;
+        }
+
+        /* --- 8. Popup / Modal Design --- */
+        .modal-overlay {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); 
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-box {
+            background-color: #1a1a1a;
+            border: 3px solid #f1c40f;
+            border-radius: 15px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.7);
+        }
+
+        .modal-box h2 {
+            color: #f1c40f;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .modal-box p {
+            color: #e0e0e0;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover { color: #ff4c4c; }
+
+        /* --- 9. Footer Design --- */
+        footer {
+            background-color: #1a1a1a;
+            color: #aaaaaa;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            border-top: 2px solid #3498db;
+            margin-top: auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        footer b {
+            color: #f1c40f;
+        }
+
+        /* --- 10. Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            body { padding-top: 60px; }
+            .wrapper { flex-direction: column; }
+            .top-navbar { padding: 0 10px; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 2px solid #3498db;
+                padding-bottom: 10px;
+            }
+            .sidebar a { display: inline-block; padding: 10px; border: none; font-size: 14px; }
+            .main-content { margin-left: 0; width: 100%; padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-navbar">
+        <div class="logo">
+            <i class="fas fa-laptop-code"></i> Black Zero Community
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <aside class="sidebar">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="index.html"><i class="fas fa-list"></i> All Classes</a>
+            <a onclick="openAboutModal()"><i class="fas fa-info-circle"></i> About Us</a>
+            <a onclick="openContactModal()"><i class="fas fa-envelope"></i> Contact</a>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Welcome to Black Zero Community</h1>
+                <p>Click on any class to get the YouTube Video, Source Code, Live Website & ZIP File.</p>
+            </div>
+
+            <div class="classes-grid">
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m1.jpg" alt="Class 1" class="class-thumb">
+                    <h3>Class 1: HTML Basics</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/dY3YC9WoTsY" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c1.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c1.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z1.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m2.jpg" alt="Class 2" class="class-thumb">
+                    <h3>Class 2: HTML Website Structure & Headings</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/Z_lbOa34Lh8" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c2.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c2.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z2.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m3.jpg" alt="Class 3" class="class-thumb">
+                    <h3>Class 3: Text Formatting Tags</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/TQYDUVh5js0" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c3.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c3.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z3.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m4.jpg" alt="Class 4" class="class-thumb">
+                    <h3>Class 4: How to Add & upload Images in Website</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/GcATVpLUd1Q" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c4.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c4.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z4.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m5.jpg" alt="Class 5" class="class-thumb">
+                    <h3>Class 5: HTML Image Tag Advanced Attributes</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/39REIzZGsM0" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c5.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c5.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z5.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m6.jpg" alt="Class 6" class="class-thumb">
+                    <h3>Class 6: HTML Lists Tutorial for Beginners</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/EBqFPUAgnU0" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c6.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c6.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z6.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m7.jpg" alt="Class 7" class="class-thumb">
+                    <h3>Class 7: How to Connect Multiple Pages in HTML</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/j0mXd0drj2A" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c7.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c7.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z7.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m8.jpg" alt="Class 8" class="class-thumb">
+                    <h3>Class 8: HTML Tables Tutorial for Beginners</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/sAMvQwvjFA8" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c8.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c8.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z8.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m9.jpg" alt="Class 9" class="class-thumb">
+                    <h3>Class 9: How to Add Video & Audio in HTML</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/mq_7Wh4sgfI" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c9.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c9.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z9.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m10.jpg" alt="Class 10" class="class-thumb">
+                    <h3>Class 10: Click to Expand FAQs in HTML</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/2ohPnSqgxVY" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c10.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c10.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z10.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m11.jpg" alt="Class 11" class="class-thumb">
+                    <h3>Class 11: How to Create Login Form (Step by Step)</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/xZKm_kReyIE" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c11.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c11.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z11.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m12.jpg" alt="Class 12" class="class-thumb">
+                    <h3>Class 12: Radio Buttons & Check-Boxes</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/hrs4svb3Ju0" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c12.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c12.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z12.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m13.jpg" alt="Class 13" class="class-thumb">
+                    <h3>Class 13: Dropdown Menus & Textareas</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/CqJqs-pIAQ4" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c13.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c13.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z13.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m14.jpg" alt="Class 14" class="class-thumb">
+                    <h3>Class 14: The Marquee Tag (Scrolling Text)</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/kCwlGZjwtvU" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c14.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c14.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z14.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m15.jpg" alt="Class 15" class="class-thumb">
+                    <h3>Class 15: How to Create Master HTML Tables</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/60Dg1eL-eF4" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c15.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c15.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z15.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m16.jpg" alt="Class 16" class="class-thumb">
+                    <h3>Class 16: How Does a Website Work?</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/QGy2hSz6oRA" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c16.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c16.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z16.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m17.jpg" alt="Class 17" class="class-thumb">
+                    <h3>Class 17: How To Do SEO With Meta Tags</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/TPlfiNAwvFo" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c17.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c17.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z17.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m18.jpg" alt="Class 18" class="class-thumb">
+                    <h3>Class 18: CSS Introduction</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/LHgHsbI7KEk" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c18.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c18.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z18.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m19.jpg" alt="Class 19" class="class-thumb">
+                    <h3>Class 19: What is CSS</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/kdFPLy2aBi8" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c19.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c19.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z19.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m20.jpg" alt="Class 20" class="class-thumb">
+                    <h3>Class 20: Colors in CSS</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/iNZ_TEeetI8" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c20.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c20.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z20.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m21.jpg" alt="Class 21" class="class-thumb">
+                    <h3>Class 21: Change Background & Style</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/4hG8DsJvEfU" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c21.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c21.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z21.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m22.jpg" alt="Class 22" class="class-thumb">
+                    <h3>Class 22: CSS Font Size Control</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/qLc1-y6vMfE" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c22.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c22.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z22.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+                <div class="class-card" onclick="openClassPopup(this)">
+                    <img src="Images/m23.jpg" alt="Class 23" class="class-thumb">
+                    <h3>Class 23: CSS Font Family Tutorial</h3>
+                    <p>Click to open menu</p>
+                    <div class="hidden-links" style="display: none;">
+                        <a href="https://youtu.be/l1LGI1j4wn8" target="_blank" class="btn btn-yellow"><i class="fab fa-youtube"></i> YouTube Video</a>
+                        <a href="Codes/c23.txt" target="_blank" class="btn btn-blue"><i class="fas fa-code"></i> Check Code</a>
+                        <a href="Web/c23.html" target="_blank" class="btn btn-white"><i class="fas fa-globe"></i> Check Website</a>
+                        <a href="Zip/z23.zip" class="btn btn-outline" download><i class="fas fa-file-archive"></i> Download ZIP</a>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div id="popupModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closePopup('popupModal')">&times;</span>
+            <h2 id="modalTitle">Class Title</h2>
+            <div id="modalButtons"></div>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="modal-overlay">
+        <div class="modal-box" style="border-color: #3498db;">
+            <span class="close-btn" onclick="closePopup('aboutModal')">&times;</span>
+            <h2><i class="fas fa-user-gradient" style="color:#3498db;"></i> About Me</h2>
+            <p>Hello! My name is <b>Faizan Imran</b>. I am currently a student of <b>Class 10th B</b> and an active, dedicated student of the <b>Black Zero Community</b>. I have created this platform to compile and share our Web Development course resources systematically.</p>
+        </div>
+    </div>
+
+    <div id="contactModal" class="modal-overlay">
+        <div class="modal-box" style="border-color: #e74c3c;">
+            <span class="close-btn" onclick="closePopup('contactModal')">&times;</span>
+            <h2><i class="fas fa-envelope-open-text" style="color:#e74c3c;"></i> Contact Support</h2>
+            <p>If you have any questions, confusion, or need assistance regarding the course or code, please click the button below to visit the official YouTube channel. Feel free to ask anything in the video comments section!</p>
+            <a href="https://www.youtube.com/watch?v=l1LGI1j4wn8" target="_blank" class="btn btn-yellow" style="background-color:#e74c3c; color:white;"><i class="fab fa-youtube"></i> Visit Channel & Ask Questions</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026. All rights reserved by <b>Faizan Imran</b>, a student of <b>Black Zero Community</b>.
+    </footer>
+
+    <script>
+        function openClassPopup(cardElement) {
+            var classTitle = cardElement.querySelector('h3').innerText;
+            var classLinksHTML = cardElement.querySelector('.hidden-links').innerHTML;
+
+            document.getElementById('modalTitle').innerText = classTitle;
+            document.getElementById('modalButtons').innerHTML = classLinksHTML;
+            document.getElementById('popupModal').style.display = 'flex';
+        }
+
+        function openAboutModal() {
+            document.getElementById('aboutModal').style.display = 'flex';
+        }
+
+        function openContactModal() {
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+
+        function closePopup(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>
